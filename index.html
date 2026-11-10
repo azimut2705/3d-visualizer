@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>3D Attitude Viewer</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">3D</span><div><strong>Attitude Viewer</strong><small>ESP32 · MPU6050</small></div></div>
+    <div class="top-actions">
+      <span id="connection" class="status offline"><i></i> Desconectado</span>
+      <button id="fullscreenBtn" class="icon-btn" title="Pantalla completa">⛶</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="viewer-card">
+      <div class="viewer-toolbar">
+        <div class="file-controls">
+          <label class="primary-btn" for="modelFile">＋ Importar modelo</label>
+          <input id="modelFile" type="file" accept=".glb,.gltf,.stl">
+          <span id="modelName" class="muted">Sin modelo cargado</span>
+        </div>
+        <div class="toolbar-actions">
+          <button id="resetViewBtn" class="secondary-btn">Centrar vista</button>
+          <button id="resetModelBtn" class="secondary-btn">Calibrar cero</button>
+        </div>
+      </div>
+      <div id="viewport">
+        <div id="emptyState">
+          <div class="cube-icon">◇</div>
+          <h2>Tu espacio 3D</h2>
+          <p>Importa un archivo GLB o STL para empezar.</p>
+          <label class="primary-btn" for="modelFile">Seleccionar modelo</label>
+        </div>
+        <div class="viewport-hint">Arrastra para orbitar · Rueda o pellizco para zoom</div>
+      </div>
+      <div class="viewer-footer">
+        <label class="switch-line"><input type="checkbox" id="sensorControl" checked> Controlar modelo con MPU6050</label>
+        <span id="modelInfo" class="muted">GLB recomendado</span>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="panel">
+        <div class="panel-heading"><div><h2>Orientación</h2><p>Ángulos del modelo</p></div><span class="live-dot"></span></div>
+        <div class="angle-grid">
+          <div class="angle"><span>ROLL · X</span><strong id="roll">0.0°</strong></div>
+          <div class="angle"><span>PITCH · Y</span><strong id="pitch">0.0°</strong></div>
+          <div class="angle"><span>YAW · Z</span><strong id="yaw">0.0°</strong></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h2>Giroscopio</h2><p>Velocidad angular · °/s</p></div></div>
+        <div class="data-list">
+          <div><span>X</span><strong id="gx">0.00</strong></div>
+          <div><span>Y</span><strong id="gy">0.00</strong></div>
+          <div><span>Z</span><strong id="gz">0.00</strong></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h2>Acelerómetro</h2><p>Aceleración · m/s²</p></div></div>
+        <div class="data-list">
+          <div><span>X</span><strong id="ax">0.00</strong></div>
+          <div><span>Y</span><strong id="ay">0.00</strong></div>
+          <div><span>Z</span><strong id="az">0.00</strong></div>
+        </div>
+      </section>
+      <section class="panel settings">
+        <div class="panel-heading"><div><h2>Conexión</h2><p>Broker MQTT público de pruebas</p></div></div>
+        <label for="topicInput">Canal del dispositivo</label>
+        <input id="topicInput" type="text" spellcheck="false">
+        <button id="connectBtn" class="primary-btn full">Conectar sensor</button>
+        <p class="note">El canal es público. No transmitas información privada. Para un uso permanente, configura un broker privado con autenticación.</p>
+      </section>
+    </aside>
+  </main>
+  <div id="toast" role="status"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
